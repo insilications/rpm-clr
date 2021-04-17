@@ -753,8 +753,8 @@ AS_IF([test "$with_acl" = yes],[
 AC_SUBST(WITH_ACL_LIB)
 AM_CONDITIONAL(ACL,[test "$with_acl" = yes])
 
-PKG_CHECK_MODULES([LUA],
-    [lua >= 5.2],
+PKG_CHECK_MODULES_STATIC([LUA],
+    [lua53 >= 5.3],
     [],
     [AC_MSG_ERROR([lua not present or too old)])])
 AC_SUBST(LUA_CFLAGS)
