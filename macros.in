@@ -685,7 +685,7 @@ package or when debugging this package.\
 # 0 			disable
 # -1 (or undefined)	autodetect on platforms where supported, otherwise
 # 			default to disabled
-#%_minimize_writes      -1
+%_minimize_writes 1
 
 # Flush file IO during transactions (at a severe cost in performance
 # for rotational disks).
