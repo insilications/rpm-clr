@@ -1143,6 +1143,7 @@ package or when debugging this package.\
 %__transaction_fapolicyd	%{__plugindir}/fapolicyd.so
 %__transaction_fsverity		%{__plugindir}/fsverity.so
 %__transaction_prioreset	%{__plugindir}/prioreset.so
+%__transaction_ldconfig		%{__plugindir}/ldconfig.so
 %__transaction_audit		%{__plugindir}/audit.so
 
 #------------------------------------------------------------------------------
