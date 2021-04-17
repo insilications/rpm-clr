@@ -254,7 +254,7 @@ strip_to_debug()
   $strip_glibs && case "$(file -bi "$2")" in
     application/x-sharedlib*) g=-g ;;
   esac
-  eu-strip --remove-comment $r $g ${keep_remove_args} -f "$1" "$2" || exit
+  eu-strip -p --remove-comment $r $g ${keep_remove_args} -f "$1" "$2" || exit
   chmod 444 "$1" || exit
 }
 
