@@ -709,10 +709,6 @@ static rpmRC packageBinary(rpmSpec spec, Package pkg, const char *cookie, int ch
 	headerPutBin(pkg->header, RPMTAG_SOURCEPKGID, spec->sourcePkgId,16);
     }
 
-    if (cheating) {
-	(void) rpmlibNeedsFeature(pkg, "ShortCircuited", "4.9.0-1");
-    }
-
     if ((rc = getPkgFilename(pkg->header, filename)))
 	return rc;
 

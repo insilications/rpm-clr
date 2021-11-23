@@ -637,7 +637,7 @@ int main(int argc, char *argv[])
     case 'i':
 	ba->buildAmount |= RPMBUILD_INSTALL;
 	ba->buildAmount |= RPMBUILD_CHECK;
-	if ((buildChar == 'i') && shortCircuit)
+	if (/*(buildChar == 'i') && */ shortCircuit)
 	    break;
     case 'c':
 	ba->buildAmount |= RPMBUILD_BUILD;
@@ -646,7 +646,7 @@ int main(int argc, char *argv[])
 	    ba->buildAmount |= RPMBUILD_DUMPBUILDREQUIRES;
 	    ba->buildAmount |= RPMBUILD_CHECKBUILDREQUIRES;
 	}
-	if ((buildChar == 'c') && shortCircuit)
+	if (/*(buildChar == 'c') && */ shortCircuit)
 	    break;
     case 'p':
 	ba->buildAmount |= RPMBUILD_PREP;
