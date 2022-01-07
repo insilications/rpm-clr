@@ -35,6 +35,7 @@ static struct rpmBuildArguments_s rpmBTArgs;
 #define	POPT_BB			0x6262
 #define	POPT_BC			0x6263
 #define	POPT_BI			0x6269
+#define	POPT_BIB		0x626962
 #define	POPT_BL			0x626c
 #define	POPT_BP			0x6270
 #define	POPT_BS			0x6273
@@ -63,6 +64,7 @@ static int noDeps = 0;			/*!< from --nodeps */
 static int shortCircuit = 0;		/*!< from --short-circuit */
 static char buildMode = 0;		/*!< Build mode (one of "btBC") */
 static char buildChar = 0;		/*!< Build stage (one of "abcilps ") */
+static char buildCharAdv = 0;
 static rpmBuildFlags nobuildAmount = 0;	/*!< Build stage disablers */
 static ARGV_t build_targets = NULL;	/*!< Target platform(s) */
 static int buildInPlace = 0;		/*!< from --build-in-place */
@@ -81,6 +83,7 @@ static void buildArgCallback( poptContext con,
     case POPT_BB:
     case POPT_BC:
     case POPT_BI:
+    case POPT_BIB:
     case POPT_BL:
     case POPT_BP:
     case POPT_BS:
@@ -103,9 +106,16 @@ static void buildArgCallback( poptContext con,
     case POPT_TR:
 	if (opt->val == POPT_BS || opt->val == POPT_TS)
 	    noDeps = 1;
-	if (buildMode == '\0' && buildChar == '\0') {
-	    buildMode = (((unsigned)opt->val) >> 8) & 0xff;
-	    buildChar = (opt->val     ) & 0xff;
+	if (buildMode == '\0' && buildChar == '\0' && buildCharAdv == '\0') {
+		buildCharAdv = (((unsigned)opt->val) >> 16) & 0xff;
+		if (buildCharAdv == '\0') {
+			buildMode = (((unsigned)opt->val) >> 8) & 0xff;
+			buildChar = (opt->val) & 0xff;
+		} else {
+			shortCircuit = 1;
+			buildChar = (((unsigned)opt->val) >> 8) & 0xff;
+			buildMode = (opt->val) & 0xff;
+		}
 	}
 	break;
 
@@ -149,6 +159,9 @@ static struct poptOption rpmBuildPoptTable[] = {
 	N_("<specfile>") },
  { "bi", 0, POPT_ARGFLAG_ONEDASH, 0, POPT_BI,
 	N_("build through %install (%prep, %build, then install) from <specfile>"),
+	N_("<specfile>") },
+ { "bib", 0, POPT_ARGFLAG_ONEDASH, 0, POPT_BIB,
+	N_("build from %install to binary build from <specfile>"),
 	N_("<specfile>") },
  { "bl", 0, POPT_ARGFLAG_ONEDASH, 0, POPT_BL,
 	N_("verify %files section from <specfile>"),
@@ -649,6 +662,48 @@ int main(int argc, char *argv[])
 	ba->buildAmount |= RPMBUILD_PACKAGESOURCE;
 	break;
     }
+
+    if (buildCharAdv != '\0') {
+		switch (buildCharAdv) {
+		case 'a':
+		ba->buildAmount |= RPMBUILD_PACKAGESOURCE;
+		case 'b':
+		ba->buildAmount |= RPMBUILD_PACKAGEBINARY;
+		ba->buildAmount |= RPMBUILD_CLEAN;
+		if (buildChar == 'i')
+			break;
+		case 'i':
+		ba->buildAmount |= RPMBUILD_INSTALL;
+		ba->buildAmount |= RPMBUILD_CHECK;
+		if (buildChar == 'c')
+			break;
+		case 'c':
+		ba->buildAmount |= RPMBUILD_BUILD;
+		ba->buildAmount |= RPMBUILD_BUILDREQUIRES;
+		if (!noDeps) {
+			ba->buildAmount |= RPMBUILD_DUMPBUILDREQUIRES;
+			ba->buildAmount |= RPMBUILD_CHECKBUILDREQUIRES;
+		}
+		if (buildChar == 'p')
+			break;
+		case 'p':
+		ba->buildAmount |= RPMBUILD_PREP;
+		break;
+		case 'l':
+		ba->buildAmount |= RPMBUILD_FILECHECK;
+		break;
+		case 'r':
+		ba->buildAmount |= RPMBUILD_PREP;
+		ba->buildAmount |= RPMBUILD_BUILDREQUIRES;
+		ba->buildAmount |= RPMBUILD_DUMPBUILDREQUIRES;
+		if (!noDeps)
+			ba->buildAmount |= RPMBUILD_CHECKBUILDREQUIRES;
+		case 's':
+		ba->buildAmount |= RPMBUILD_PACKAGESOURCE;
+		break;
+		}
+	}
+
     ba->buildAmount &= ~(nobuildAmount);
 
     switch (bigMode) {
