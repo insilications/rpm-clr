@@ -111,75 +111,75 @@ noinst_LTLIBRARIES = 		libcliutils.la
 libcliutils_la_SOURCES = 	cliutils.h cliutils.c
 libcliutils_la_CPPFLAGS =	$(AM_CPPFLAGS)
 libcliutils_la_LIBADD = 	lib/librpm.la rpmio/librpmio.la
-libcliutils_la_LIBADD +=	@WITH_POPT_LIB@
+libcliutils_la_LIBADD +=	-lpopt
 
 rpm_SOURCES =		rpm.c debug.h system.h
 rpm_CPPFLAGS =		$(AM_CPPFLAGS)
 rpm_LDADD =		libcliutils.la
 rpm_LDADD +=		lib/librpm.la rpmio/librpmio.la
-rpm_LDADD +=		@WITH_POPT_LIB@
+rpm_LDADD +=		-lpopt -lbz2 -lz -llzma -lzstd -llua -lsqlite3 -lcap -lacl -lcrypto
 
 rpmdb_SOURCES =		rpmdb.c debug.h system.h
 rpmdb_CPPFLAGS =	$(AM_CPPFLAGS)
 rpmdb_LDADD =		libcliutils.la
 rpmdb_LDADD +=		lib/librpm.la rpmio/librpmio.la
-rpmdb_LDADD +=		@WITH_POPT_LIB@
+rpmdb_LDADD +=		-lpopt -lbz2 -lz -llzma -lzstd -llua -lsqlite3 -lcap -lacl -lcrypto
 
 rpmkeys_SOURCES =	rpmkeys.c debug.h system.h
 rpmkeys_CPPFLAGS =	$(AM_CPPFLAGS)
 rpmkeys_LDADD =		libcliutils.la
 rpmkeys_LDADD +=	lib/librpm.la rpmio/librpmio.la
-rpmkeys_LDADD +=	@WITH_POPT_LIB@
+rpmkeys_LDADD +=	-lpopt -lbz2 -lz -llzma -lzstd -llua -lsqlite3 -lcap -lacl -lcrypto
 
 rpmsign_SOURCES =	rpmsign.c debug.h system.h
 rpmsign_CPPFLAGS =	$(AM_CPPFLAGS)
 rpmsign_LDADD =		libcliutils.la
 rpmsign_LDADD +=	sign/librpmsign.la lib/librpm.la rpmio/librpmio.la
-rpmsign_LDADD +=	@WITH_POPT_LIB@
+rpmsign_LDADD +=	-lpopt -lbz2 -lz -llzma -lzstd -llua -lsqlite3 -lcap -lacl -lcrypto
 
 rpmbuild_SOURCES =	rpmbuild.c debug.h system.h
 rpmbuild_CPPFLAGS =	$(AM_CPPFLAGS)
 rpmbuild_LDADD =	libcliutils.la
 rpmbuild_LDADD +=	build/librpmbuild.la lib/librpm.la rpmio/librpmio.la
-rpmbuild_LDADD += 	@WITH_POPT_LIB@
+rpmbuild_LDADD += 	-lpopt -lbz2 -lz -llzma -lzstd -llua -lsqlite3 -lcap -lacl -lcrypto -lelf -ldw -lmagic
 
 rpmspec_SOURCES =	rpmspec.c debug.h system.h
 rpmspec_CPPFLAGS =	$(AM_CPPFLAGS)
 rpmspec_CPPFLAGS +=	@READLINE_CFLAGS@
 rpmspec_LDADD =		libcliutils.la
 rpmspec_LDADD +=	build/librpmbuild.la lib/librpm.la rpmio/librpmio.la
-rpmspec_LDADD +=	@WITH_POPT_LIB@ @READLINE_LIBS@
+rpmspec_LDADD +=	-lpopt -lreadline -ltinfow -lbz2 -lz -llzma -lzstd -llua -lsqlite3 -lcap -lacl -lcrypto
 
 rpm2cpio_SOURCES =	rpm2cpio.c debug.h system.h
 rpm2cpio_LDADD =	lib/librpm.la rpmio/librpmio.la
-rpm2cpio_LDADD +=	@WITH_POPT_LIB@
+rpm2cpio_LDADD +=	-lpopt -lbz2 -lz -llzma -lzstd -llua -lsqlite3 -lcap -lacl -lcrypto
 
 rpm2archive_SOURCES =	rpm2archive.c debug.h system.h
 rpm2archive_LDADD =	lib/librpm.la rpmio/librpmio.la
-rpm2archive_LDADD +=	@WITH_POPT_LIB@ @WITH_ARCHIVE_LIB@
+rpm2archive_LDADD +=	-lpopt -llua -lsqlite3 -lcap -lacl -lcrypto -larchive -lbz2 -lz -llzma -lzstd -lmagic -lelf
 
 bin_PROGRAMS +=		rpmlua
 rpmlua_CPPFLAGS =	$(AM_CPPFLAGS)
 rpmlua_CPPFLAGS +=	@READLINE_CFLAGS@
 rpmlua_SOURCES =	tools/rpmlua.c debug.h system.h
 rpmlua_LDADD =		lib/librpm.la rpmio/librpmio.la
-rpmlua_LDADD +=		@WITH_POPT_LIB@
-rpmlua_LDADD += 	@READLINE_LIBS@
+rpmlua_LDADD +=		-lpopt
+rpmlua_LDADD += 	-lreadline -ltinfow -lbz2 -lz -llzma -lzstd -llua -lsqlite3 -lcap -lacl -lcrypto
 
 if LIBELF
 rpmlibexec_PROGRAMS +=	elfdeps
 elfdeps_SOURCES =	tools/elfdeps.c
 elfdeps_LDADD =		rpmio/librpmio.la
-elfdeps_LDADD +=	@WITH_LIBELF_LIB@ @WITH_POPT_LIB@
+elfdeps_LDADD +=	-lelf -lpopt -lbz2 -lz -llzma -lzstd -llua -lsqlite3 -lcap -lacl -lcrypto -lmagic
 endif #LIBELF
 
 rpmlibexec_PROGRAMS +=	rpmdeps
 rpmdeps_SOURCES =	tools/rpmdeps.c
-rpmdeps_LDADD =		lib/librpm.la rpmio/librpmio.la build/librpmbuild.la @WITH_POPT_LIB@
+rpmdeps_LDADD =		lib/librpm.la rpmio/librpmio.la build/librpmbuild.la -lpopt -lbz2 -lz -llzma -lzstd -llua -lsqlite3 -lcap -lacl -lcrypto -lmagic -lelf
 
 bin_PROGRAMS +=		rpmgraph
 rpmgraph_SOURCES =	tools/rpmgraph.c
-rpmgraph_LDADD =	lib/librpm.la rpmio/librpmio.la @WITH_POPT_LIB@
+rpmgraph_LDADD =	lib/librpm.la rpmio/librpmio.la -lpopt -lbz2 -lz -llzma -lzstd -llua -lsqlite3 -lcap -lacl -lcrypto
 
 dist_bin_SCRIPTS =	scripts/gendiff
 

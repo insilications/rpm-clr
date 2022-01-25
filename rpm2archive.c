@@ -20,10 +20,10 @@
 
 #define BUFSIZE (128*1024)
 
-int compress = 1;
+int compress_enabled = 1;
 
 static struct poptOption optionsTable[] = {
-    { "nocompression", 'n', POPT_ARG_VAL, &compress, 0,
+    { "nocompression", 'n', POPT_ARG_VAL, &compress_enabled, 0,
         N_("create uncompressed tar file"),
         NULL },
     POPT_AUTOHELP
@@ -131,7 +131,7 @@ static int process_package(rpmts ts, const char * filename)
 
     /* create archive */
     a = archive_write_new();
-    if (compress) {
+    if (compress_enabled) {
 	if (archive_write_add_filter_gzip(a) != ARCHIVE_OK) {
 	    fprintf(stderr, "%s\n", archive_error_string(a));
 	    exit(EXIT_FAILURE);
@@ -160,7 +160,7 @@ static int process_package(rpmts ts, const char * filename)
 	} else {
 	    outname = rstrscat(NULL, filename, NULL);
 	}
-	if (compress) {
+	if (compress_enabled) {
 	    outname = rstrscat(&outname, ".tgz", NULL);
 	} else {
 	    outname = rstrscat(&outname, ".tar", NULL);
